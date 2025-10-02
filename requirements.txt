@@ -1,0 +1,7 @@
+﻿pandas
+numpy
+requests
+pyarrow
+prophet
+ruff
+black
