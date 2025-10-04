@@ -40,7 +40,7 @@ function nowIso() {
 // Example pattern:
 // https://raw.githubusercontent.com/<owner>/<repo>/<branch>/data/seeds/nfl/2025/week=5/espn.seed.json
 async function fetchFromEspn(year, week) {
-	const url = 'https://raw.githubusercontent.com/Incarcer/customvenom-data-pipelines/main/data/stats/nfl/2025/week=5/espn.json';
+	const url = "https://raw.githubusercontent.com/Incarcer/customvenom-data-pipelines/main/data/stats/nfl/2025/week=5/espn.json";
 	const res = await fetch(url, {
 		headers: {
 			"User-Agent": "customvenom/0.1",
@@ -54,19 +54,55 @@ async function fetchFromEspn(year, week) {
 	return Array.isArray(data) ? data : [];
 }
 
-function normalizeEspn(records, { league, year, week }) {
+unction normalizeEspn(records, { league, year, week }) {
 	const source = "espn";
 	const out = [];
+
+	if (!Array.isArray(records)) return out;
+
 	for (const r of records) {
-		const team = canonicalTeamNameToCode(r.teamName);
-		const opp = canonicalTeamNameToCode(r.opponentName);
+		// Accept multiple possible key names from different payloads
+		const rawTeam =
+			r.teamName ||
+			r.team ||
+			r.team_full_name ||
+			r.team_code ||
+			r.teamAbbr ||
+			"";
+		const rawOpp =
+			r.opponentName ||
+			r.opponent ||
+			r.opponent_full_name ||
+			r.opp_code ||
+			r.oppAbbr ||
+			"";
+		const team = canonicalTeamNameToCode(rawTeam);
+		const opp = canonicalTeamNameToCode(rawOpp);
+
+		// Player key fallbacks
+		const sourcePlayerKey =
+			r.sourcePlayerKey ||
+			r.playerId ||
+			r.player_id ||
+			r.id ||
+			r.espnId ||
+			"unknown";
+
+		const player_id = mkPlayerId(source, String(sourcePlayerKey));
 		const game_id = mkGameId(league, year, week, team, opp);
-		const player_id = mkPlayerId(source, r.sourcePlayerKey);
 		const ingested_at = nowIso();
 
-		// flatten stats to stat_name/value/unit rows
-		for (const [stat_name, value] of Object.entries(r.stats || {})) {
-			if (value == null || Number.isNaN(Number(value))) continue;
+		// Stats can be nested or flat; prefer r.stats, else synthesize from common fields
+		const statsObj = r.stats && typeof r.stats === "object" ? r.stats : {};
+		// Optionally map a few common top-level keys into stats if present
+		if (r.yards != null && statsObj.yards == null) statsObj.yards = r.yards;
+		if (r.touchdowns != null && statsObj.touchdowns == null) statsObj.touchdowns = r.touchdowns;
+		if (r.tds != null && statsObj.touchdowns == null) statsObj.touchdowns = r.tds;
+
+		for (const [stat_name, valueRaw] of Object.entries(statsObj)) {
+			const valueNum = Number(valueRaw);
+			if (valueRaw == null || Number.isNaN(valueNum)) continue;
+
 			out.push({
 				player_id,
 				team_id: `nfl:${team}`,
@@ -74,13 +110,14 @@ function normalizeEspn(records, { league, year, week }) {
 				week,
 				opponent: opp,
 				stat_name,
-				value: Number(value),
+				value: valueNum,
 				unit: stat_name === "yards" ? "yards" : "count",
 				source,
 				ingested_at,
 			});
 		}
 	}
+
 	return out;
 }
 
