@@ -31,7 +31,7 @@ function nowIso() {
 // Example pattern:
 // https://raw.githubusercontent.com/<owner>/<repo>/<branch>/data/seeds/nfl/2025/week=5/espn.seed.json
 async function fetchFromEspn(year, week) {
-	const url = 'https://raw.githubusercontent.com/jdewett81/customvenom-data-pipelines/main/data/stats/nfl/2025/week=5/espn.json';
+	const url = 'https://raw.githubusercontent.com/Incarcer/customvenom-data-pipelines/main/data/stats/nfl/2025/week=5/espn.json';
 	const res = await fetch(url, {
 		headers: {
 			"User-Agent": "customvenom/0.1",
