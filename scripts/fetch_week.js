@@ -7,12 +7,21 @@ import path from 'node:path';
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
 function canonicalTeamNameToCode(name) {
-	const map = {
-		"Kansas City Chiefs": "KC",
-		"Las Vegas Raiders": "LV",
-		// add as you go
-	};
-	return map[name] || name.toUpperCase().slice(0, 3);
+
+if (!name || typeof name !== "string") return "UNK";
+
+const map = {
+
+"Kansas City Chiefs": "KC",
+
+"Las Vegas Raiders": "LV",
+
+// add as you go
+
+};
+
+return map[name] || name.toUpperCase().slice(0, 3);
+
 }
 
 function mkPlayerId(source, sourcePlayerKey) {
