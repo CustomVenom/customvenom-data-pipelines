@@ -8,7 +8,17 @@
 
 "scripts": {
 
-"etl": "node scripts/fetch_week.js 2025 5 espn"
+"etl:espn": "node scripts/fetch_week.js 2025 5 espn",
+
+"etl:free": "node scripts/fetch_week.js 2025 5 freeapi1",
+
+"validate:espn": "node scripts/validate_file.js data/stats/nfl/2025/week=5/espn.json",
+
+"validate:free": "node scripts/validate_file.js data/stats/nfl/2025/week=5/freeapi1.json",
+
+"etl:all": "npm run etl:espn && npm run etl:free",
+
+"validate:all": "npm run validate:espn && npm run validate:free"
 
 }
 
