@@ -1,0 +1,26 @@
+[
+  {
+    "player_id": "freeapi1:67890",
+    "team_id": "nfl:LV",
+    "game_id": "nfl:2025-05-LV-KC",
+    "week": 5,
+    "opponent": "KC",
+    "stat_name": "yards",
+    "value": 88,
+    "unit": "yards",
+    "source": "freeapi1",
+    "ingested_at": "2025-10-04T04:50:00.000Z"
+  },
+  {
+    "player_id": "freeapi1:67890",
+    "team_id": "nfl:LV",
+    "game_id": "nfl:2025-05-LV-KC",
+    "week": 5,
+    "opponent": "KC",
+    "stat_name": "touchdowns",
+    "value": 1,
+    "unit": "count",
+    "source": "freeapi1",
+    "ingested_at": "2025-10-04T04:50:00.000Z"
+  }
+]
