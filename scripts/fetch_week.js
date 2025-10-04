@@ -49,7 +49,16 @@ async function fetchFromEspn(year, week) {
 	// { sourcePlayerKey, playerName, teamName, opponentName, stats: { yards, touchdowns, ... } }
 	return Array.isArray(data) ? data : [];
 }
+// Second source: "freeapi1"
+// Second source: "freeapi1" using a local seed file (no URL)
+import { readFile } from 'node:fs/promises';
 
+async function fetchFromFreeApi1(year, week) {
+  const localPath = "data/seeds/nfl/2025/week=5/freeapi1.seed.json";
+  const text = await readFile(localPath, "utf8");
+  const data = JSON.parse(text);
+  return Array.isArray(data) ? data : [];
+}
 // NORMALIZE: resilient to slightly different field names
 function normalizeEspn(records, { league, year, week }) {
 	const source = "espn";
@@ -139,17 +148,15 @@ async function main() {
 	let rows = [];
 
 	if (source === "espn") {
-		const raw = await fetchFromEspn(year, week);
-
-		// Option 1: use normalize (default)
-		rows = Array.isArray(raw) ? raw : [];
-
-		// Option 2: if your seed is already flat rows, bypass normalize:
-		// rows = Array.isArray(raw) ? raw : [];
+	  const raw = await fetchFromEspn(year, week);
+	  rows = Array.isArray(raw) ? raw : [];
+	} else if (source === "freeapi1") {
+	  const raw = await fetchFromFreeApi1(year, week);
+	  rows = Array.isArray(raw) ? raw : [];
 	} else {
-		console.error(`Unknown source: ${source}`);
-		process.exit(1);
-	}
+	  console.error(`Unknown source: ${source}`);
+	  process.exit(1);
+}
 
 	const outDir = path.join("data", "stats", league, String(year), `week=${week}`);
 	const outPath = path.join(outDir, `${source}.json`);
