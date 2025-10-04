@@ -1,0 +1,26 @@
+[
+  {
+    "player_id": "espn:12345",
+    "team_id": "nfl:KC",
+    "game_id": "nfl:2025-05-KC-LV",
+    "week": 5,
+    "opponent": "LV",
+    "stat_name": "yards",
+    "value": 320,
+    "unit": "yards",
+    "source": "espn",
+    "ingested_at": "2025-10-03T07:17:22.445Z"
+  },
+  {
+    "player_id": "espn:12345",
+    "team_id": "nfl:KC",
+    "game_id": "nfl:2025-05-KC-LV",
+    "week": 5,
+    "opponent": "LV",
+    "stat_name": "touchdowns",
+    "value": 3,
+    "unit": "count",
+    "source": "espn",
+    "ingested_at": "2025-10-03T07:17:22.445Z"
+  }
+]
