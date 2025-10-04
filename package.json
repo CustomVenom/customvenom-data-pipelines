@@ -1,0 +1,15 @@
+{
+
+"name": "customvenom-data-pipelines",
+
+"private": true,
+
+"type": "module",
+
+"scripts": {
+
+"etl": "node scripts/fetch_week.js 2025 5 espn"
+
+}
+
+}
