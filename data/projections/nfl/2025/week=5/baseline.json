@@ -1,0 +1,30 @@
+[
+  {
+    "player_id": "espn:12345",
+    "stat_name": "touchdowns",
+    "projection": 3.0,
+    "method": "avg(vendor_values)",
+    "sources_used": 1
+  },
+  {
+    "player_id": "espn:12345",
+    "stat_name": "yards",
+    "projection": 320.0,
+    "method": "avg(vendor_values)",
+    "sources_used": 1
+  },
+  {
+    "player_id": "freeapi1:67890",
+    "stat_name": "touchdowns",
+    "projection": 1.0,
+    "method": "avg(vendor_values)",
+    "sources_used": 1
+  },
+  {
+    "player_id": "freeapi1:67890",
+    "stat_name": "yards",
+    "projection": 88.0,
+    "method": "avg(vendor_values)",
+    "sources_used": 1
+  }
+]
