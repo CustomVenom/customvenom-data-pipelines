@@ -1,0 +1,29 @@
+name: Validate Golden Week
+on:
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch: {}
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    env:
+      ARTIFACT_BASE: ${{ secrets.ARTIFACT_BASE }} 
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install deps
+        run: sudo apt-get update && sudo apt-get install -y jq curl
+      - name: Check 5 artifacts for schema fields
+        run: |
+          set -euo pipefail
+          ks=(
+            "data/stats/nfl/2025/week=2025-06/espn.json"
+            "data/weather/nfl/2025/week=2025-06/games.json"
+            "data/injuries/nfl/2025/week=2025-06/consensus.json"
+            "data/usage/nfl/2025/week=2025-06/usage.json"
+            "data/projections/nfl/2025/week=2025-06/baseline.json"
+          )
+          for k in "${ks[@]}"; do
+            curl -fsS "${ARTIFACT_BASE}/${k}" | jq -e 'type == "object" and .schema_version and .last_refresh' >/dev/null
+          done
+          echo "All five artifacts PASS"
