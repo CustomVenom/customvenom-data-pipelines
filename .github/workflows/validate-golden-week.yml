@@ -24,7 +24,6 @@ jobs:
             "data/projections/nfl/2025/week=2025-06/baseline.json"
           )
           for k in "${ks[@]}"; do
-            curl -fsS "${ARTIFACT_BASE}/${k}" | jq -e '.schema_version and .last_refresh' >/dev/null
-            echo "PASS ${k}"
+            curl -fsS "${ARTIFACT_BASE}/${k}" | jq -e 'type == "object" and .schema_version and .last_refresh' >/dev/null
           done
           echo "All five artifacts PASS"
