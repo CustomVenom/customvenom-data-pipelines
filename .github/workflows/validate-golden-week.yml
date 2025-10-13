@@ -8,7 +8,7 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     env:
-      ARTIFACT_BASE: $ secrets.ARTIFACT_BASE 
+      ARTIFACT_BASE: ${{ secrets.ARTIFACT_BASE }} 
     steps:
       - uses: actions/checkout@v4
       - name: Install deps
