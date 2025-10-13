@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "last_refresh": "2025-10-13T06:52:00Z",
+  "data": [
+    {
+      "game_id": "nfl:2025-06-KC-LV",
+      "week": 6,
+      "home_team": "KC",
+      "away_team": "LV",
+      "weather": {
+        "temperature": 72,
+        "condition": "sunny",
+        "humidity": 45,
+        "wind_speed": 8,
+        "precipitation_chance": 10
+      },
+      "stadium": "Arrowhead Stadium",
+      "game_time": "2025-10-13T20:00:00Z",
+      "source": "weather_api",
+      "ingested_at": "2025-10-13T06:52:00Z"
+    },
+    {
+      "game_id": "nfl:2025-06-BUF-NE",
+      "week": 6,
+      "home_team": "BUF",
+      "away_team": "NE",
+      "weather": {
+        "temperature": 58,
+        "condition": "cloudy",
+        "humidity": 65,
+        "wind_speed": 12,
+        "precipitation_chance": 25
+      },
+      "stadium": "Highmark Stadium",
+      "game_time": "2025-10-13T17:00:00Z",
+      "source": "weather_api",
+      "ingested_at": "2025-10-13T06:52:00Z"
+    }
+  ]
+}
