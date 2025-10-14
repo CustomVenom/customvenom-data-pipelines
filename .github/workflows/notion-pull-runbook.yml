@@ -1,0 +1,12 @@
+name: Notion → Runbook.md (PR flow)
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"  # every 15 minutes
+  workflow_dispatch: {}
+
+jobs:
+  hello:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Hello from Notion Runbook PR flow"
