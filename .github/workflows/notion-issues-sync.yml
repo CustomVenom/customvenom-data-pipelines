@@ -19,6 +19,9 @@ jobs:
       # Repo where issues are created (GitHub auto-fills this)
       GH_REPO: ${{ github.repository }}
 
+      # GitHub token (automatically provided by GitHub Actions)
+      GITHUB_TOKEN: ${{ github.token }}
+
       # Optional: if your notes prop has a different name
       NOTES_PROP: "Notes"
 
