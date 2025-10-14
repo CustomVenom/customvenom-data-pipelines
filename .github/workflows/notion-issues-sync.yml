@@ -1,0 +1,253 @@
+name: Notion → GitHub Issues (Today — MVP P0, checkbox)
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"  # every 15 minutes
+  workflow_dispatch: {}
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    env:
+      # Set these in repo Settings → Secrets and variables → Actions
+      NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+      NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+
+      # Repo where issues are created (GitHub auto-fills this)
+      GH_REPO: ${{ github.repository }}
+
+      # Optional: if your notes prop has a different name
+      NOTES_PROP: "Notes"
+
+      # Optional: Notion Owner → GitHub username map (comma-separated pairs)
+      # Example: "Jeremiah Dewett=Incarcer, Teammate Name=their-gh-user"
+      ASSIGNEE_MAP: "Jeremiah Dewett=Incarcer"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Sync Notion DB → GitHub Issues
+        run: |
+          set -euo pipefail
+          cat > sync.mjs <<'JS'
+          const NOTION_TOKEN = process.env.NOTION_TOKEN;
+          const DB_ID = process.env.NOTION_DATABASE_ID;
+          const GH_REPO = process.env.GH_REPO;
+          const GH_TOKEN = process.env.GITHUB_TOKEN;
+          const NOTES_PROP = process.env.NOTES_PROP || "Notes";
+          const parseMap = (s) => {
+            const m = new Map();
+            if (!s) return m;
+            s.split(',').forEach(pair => {
+              const [k,v] = pair.split('=').map(x => (x||'').trim());
+              if (k && v) m.set(k,v);
+            });
+            return m;
+          };
+          const ASSIGNEE_MAP = parseMap(process.env.ASSIGNEE_MAP || "");
+
+          if (!NOTION_TOKEN || !DB_ID || !GH_REPO || !GH_TOKEN) {
+            console.error("Missing NOTION_TOKEN, NOTION_DATABASE_ID, GH_REPO, or GITHUB_TOKEN.");
+            process.exit(1);
+          }
+
+          const notion = async (path, init={}) => {
+            const res = await fetch(`https://api.notion.com/v1/${path}`, {
+              ...init,
+              headers: {
+                'Authorization': `Bearer ${NOTION_TOKEN}`,
+                'Notion-Version': '2022-06-28',
+                'Content-Type': 'application/json',
+                ...(init.headers || {}),
+              }
+            });
+            if (!res.ok) throw new Error(`Notion ${path} ${res.status}: ${await res.text()}`);
+            return res.json();
+          };
+
+          const gh = async (path, init={}) => {
+            const res = await fetch(`https://api.github.com/repos/${GH_REPO}/${path}`, {
+              ...init,
+              headers: {
+                'Authorization': `Bearer ${GH_TOKEN}`,
+                'Accept': 'application/vnd.github+json',
+                'Content-Type': 'application/json',
+                ...(init.headers || {})
+              }
+            });
+            if (!res.ok) throw new Error(`GitHub ${path} ${res.status}: ${await res.text()}`);
+            return res.json();
+          };
+
+          // Only sync rows where "Sync to GitHub" is checked and Status is To do or In progress
+          const query = {
+            filter: {
+              and: [
+                { property: "Sync to GitHub", checkbox: { equals: true } },
+                {
+                  or: [
+                    { property: "Status", status: { equals: "To do" } },
+                    { property: "Status", status: { equals: "In progress" } }
+                  ]
+                }
+              ]
+            },
+            page_size: 100
+          };
+
+          const rows = [];
+          let cursor;
+          for (let i=0;i<10;i++) {
+            const payload = cursor ? { ...query, start_cursor: cursor } : query;
+            const data = await notion(`databases/${DB_ID}/query`, {
+              method: 'POST',
+              body: JSON.stringify(payload),
+            });
+            rows.push(...data.results);
+            if (!data.has_more) break;
+            cursor = data.next_cursor;
+          }
+
+          const getPlain = (prop) => {
+            if (!prop) return '';
+            switch (prop.type) {
+              case 'title': return (prop.title||[]).map(t=>t.plain_text).join('').trim();
+              case 'rich_text': return (prop.rich_text||[]).map(t=>t.plain_text).join('').trim();
+              case 'url': return prop.url || '';
+              case 'status': return prop.status?.name || '';
+              case 'select': return prop.select?.name || '';
+              case 'multi_select': return (prop.multi_select||[]).map(o=>o.name).join(', ');
+              case 'people': return (prop.people||[]).map(p=>p.name||p.id).join(', ');
+              default: return '';
+            }
+          };
+
+          const firstOwnerName = (prop) => {
+            const people = (prop?.people || []);
+            if (people.length === 0) return '';
+            return people[0].name || people[0].id || '';
+          };
+
+          const updates = [];
+
+          for (const r of rows) {
+            const props = r.properties || {};
+            const title = getPlain(props.Name);
+            if (!title) continue;
+
+            const status = getPlain(props.Status);
+            const priority = getPlain(props.Priority) || '';
+            const stage = getPlain(props.Stage) || '';
+            const issueUrl = getPlain(props["Issue URL"]);
+            const notes = getPlain(props[NOTES_PROP]);
+            const pageUrl = r.url;
+
+            // Build labels: static + priority + stage
+            const labels = ["notion-sync"];
+            if (priority) labels.push(priority);
+            if (stage) labels.push(stage);
+
+            // Assignee from Owner map (first owner)
+            let assignees = [];
+            const ownerName = firstOwnerName(props.Owner);
+            if (ownerName && ASSIGNEE_MAP.has(ownerName)) {
+              assignees = [ASSIGNEE_MAP.get(ownerName)];
+            }
+
+            const body = [
+              `Source: ${pageUrl}`,
+              `Status: ${status}`,
+              priority ? `Priority: ${priority}` : '',
+              stage ? `Stage: ${stage}` : '',
+              '',
+              notes ? notes : '(No notes)',
+              '',
+              '(Automated sync from Notion — Today — MVP P0)'
+            ].filter(Boolean).join('\n');
+
+            const basePayload = { title, body, labels };
+            if (assignees.length) basePayload.assignees = assignees;
+
+            // Create or update
+            if (!issueUrl) {
+              const created = await gh('issues', {
+                method: 'POST',
+                body: JSON.stringify(basePayload)
+              });
+              updates.push({ pageId: r.id, issueHtml: created.html_url });
+            } else {
+              const match = issueUrl.match(/^https:\/\/github\.com\/[^\/]+\/[^\/]+\/issues\/(\d+)/);
+              if (match) {
+                const num = parseInt(match[1], 10);
+                await gh(`issues/${num}`, {
+                  method: 'PATCH',
+                  body: JSON.stringify(basePayload)
+                });
+              }
+            }
+          }
+
+          // Auto-close: if Status is Done, close and comment
+          // Query only Done + has Issue URL
+          const doneQuery = {
+            filter: {
+              and: [
+                { property: "Sync to GitHub", checkbox: { equals: true } },
+                { property: "Status", status: { equals: "Done" } }
+              ]
+            },
+            page_size: 100
+          };
+
+          let doneCursor, doneRows = [];
+          for (let i=0;i<10;i++) {
+            const payload = doneCursor ? { ...doneQuery, start_cursor: doneCursor } : doneQuery;
+            const data = await notion(`databases/${DB_ID}/query`, {
+              method: 'POST',
+              body: JSON.stringify(payload),
+            });
+            doneRows.push(...data.results);
+            if (!data.has_more) break;
+            doneCursor = data.next_cursor;
+          }
+
+          for (const r of doneRows) {
+            const props = r.properties || {};
+            const issueUrl = getPlain(props["Issue URL"]);
+            if (!issueUrl) continue;
+            const match = issueUrl.match(/^https:\/\/github\.com\/[^\/]+\/[^\/]+\/issues\/(\d+)/);
+            if (!match) continue;
+            const num = parseInt(match[1], 10);
+
+            // Comment then close
+            try {
+              await gh(`issues/${num}/comments`, {
+                method: 'POST',
+                body: JSON.stringify({ body: "✅ Task completed — automatically closed from Notion sync" })
+              });
+              await gh(`issues/${num}`, {
+                method: 'PATCH',
+                body: JSON.stringify({ state: 'closed' })
+              });
+            } catch (e) {
+              console.warn(`Close failed for #${num}: ${e.message}`);
+            }
+          }
+
+          // Write back newly created issue URLs
+          for (const u of updates) {
+            await notion(`pages/${u.pageId}`, {
+              method: 'PATCH',
+              body: JSON.stringify({ properties: { "Issue URL": { url: u.issueHtml } } })
+            });
+          }
+
+          console.log(`Created/updated ${updates.length} issues; processed ${rows.length} active rows; closed ${doneRows.length} done rows.`);
+          JS
+
+          node sync.mjs
