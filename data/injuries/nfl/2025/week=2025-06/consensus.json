@@ -1,0 +1,42 @@
+{
+  "schema_version": "v1",
+  "last_refresh": "2025-10-15T08:00:00.000Z",
+  "week": "2025-06",
+  "league": "nfl",
+  "source": "injury_consensus",
+  "injuries": [
+    {
+      "player_id": "espn:3116593",
+      "name": "Josh Allen",
+      "team": "BUF",
+      "position": "QB",
+      "status": "Probable",
+      "injury": "Shoulder",
+      "practice_status": "Full Participation",
+      "game_status": "Expected to Play",
+      "impact_pct": 5
+    },
+    {
+      "player_id": "espn:4262921",
+      "name": "Cooper Kupp",
+      "team": "LAR",
+      "position": "WR",
+      "status": "Questionable",
+      "injury": "Ankle",
+      "practice_status": "Limited",
+      "game_status": "Game-Time Decision",
+      "impact_pct": 35
+    },
+    {
+      "player_id": "espn:3051392",
+      "name": "Derrick Henry",
+      "team": "BAL",
+      "position": "RB",
+      "status": "Out",
+      "injury": "Hamstring",
+      "practice_status": "Did Not Participate",
+      "game_status": "Will Not Play",
+      "impact_pct": 100
+    }
+  ]
+}

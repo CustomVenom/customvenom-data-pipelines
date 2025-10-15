@@ -1,0 +1,61 @@
+{
+  "schema_version": "v1",
+  "last_refresh": "2025-10-15T08:00:00.000Z",
+  "week": "2025-06",
+  "league": "nfl",
+  "source": "usage_tracking",
+  "players": [
+    {
+      "player_id": "espn:3929630",
+      "name": "Christian McCaffrey",
+      "team": "SF",
+      "position": "RB",
+      "usage": {
+        "snap_pct": 82,
+        "touch_share_pct": 45,
+        "target_share_pct": 18,
+        "red_zone_touches": 8,
+        "routes_run": 32
+      }
+    },
+    {
+      "player_id": "espn:3043078",
+      "name": "Tyreek Hill",
+      "team": "MIA",
+      "position": "WR",
+      "usage": {
+        "snap_pct": 94,
+        "touch_share_pct": 28,
+        "target_share_pct": 32,
+        "red_zone_touches": 3,
+        "routes_run": 48
+      }
+    },
+    {
+      "player_id": "espn:4685",
+      "name": "Patrick Mahomes",
+      "team": "KC",
+      "position": "QB",
+      "usage": {
+        "snap_pct": 100,
+        "touch_share_pct": 0,
+        "target_share_pct": 0,
+        "red_zone_touches": 0,
+        "routes_run": 0
+      }
+    },
+    {
+      "player_id": "espn:4569618",
+      "name": "Bijan Robinson",
+      "team": "ATL",
+      "position": "RB",
+      "usage": {
+        "snap_pct": 76,
+        "touch_share_pct": 52,
+        "target_share_pct": 14,
+        "red_zone_touches": 6,
+        "routes_run": 24
+      }
+    }
+  ]
+}

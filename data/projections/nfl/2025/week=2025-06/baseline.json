@@ -1,0 +1,129 @@
+{
+  "schema_version": "v1",
+  "last_refresh": "2025-10-15T08:00:00.000Z",
+  "week": "2025-06",
+  "league": "nfl",
+  "method": "baseline",
+  "projections": [
+    {
+      "player_id": "espn:4685",
+      "name": "Patrick Mahomes",
+      "team": "KC",
+      "position": "QB",
+      "stat_name": "passing_yards",
+      "projection": 285.5,
+      "method": "avg(vendor_values)",
+      "sources_used": 3,
+      "confidence": 0.85,
+      "reasons": [
+        "Based on 3 data sources",
+        "Averaged across multiple vendor projections"
+      ]
+    },
+    {
+      "player_id": "espn:4685",
+      "name": "Patrick Mahomes",
+      "team": "KC",
+      "position": "QB",
+      "stat_name": "passing_tds",
+      "projection": 2.2,
+      "method": "avg(vendor_values)",
+      "sources_used": 3,
+      "confidence": 0.78,
+      "reasons": [
+        "Based on 3 data sources",
+        "High confidence due to consistent data"
+      ]
+    },
+    {
+      "player_id": "espn:3929630",
+      "name": "Christian McCaffrey",
+      "team": "SF",
+      "position": "RB",
+      "stat_name": "rushing_yards",
+      "projection": 102.8,
+      "method": "avg(vendor_values)",
+      "sources_used": 3,
+      "confidence": 0.88,
+      "reasons": [
+        "Based on 3 data sources",
+        "High confidence due to consistent data"
+      ]
+    },
+    {
+      "player_id": "espn:3929630",
+      "name": "Christian McCaffrey",
+      "team": "SF",
+      "position": "RB",
+      "stat_name": "receiving_yards",
+      "projection": 45.3,
+      "method": "avg(vendor_values)",
+      "sources_used": 2,
+      "confidence": 0.72,
+      "reasons": [
+        "Based on 2 data sources",
+        "Averaged across multiple vendor projections"
+      ]
+    },
+    {
+      "player_id": "espn:3043078",
+      "name": "Tyreek Hill",
+      "team": "MIA",
+      "position": "WR",
+      "stat_name": "receiving_yards",
+      "projection": 118.5,
+      "method": "avg(vendor_values)",
+      "sources_used": 3,
+      "confidence": 0.82,
+      "reasons": [
+        "Based on 3 data sources",
+        "High confidence due to consistent data"
+      ]
+    },
+    {
+      "player_id": "espn:3043078",
+      "name": "Tyreek Hill",
+      "team": "MIA",
+      "position": "WR",
+      "stat_name": "receptions",
+      "projection": 7.8,
+      "method": "avg(vendor_values)",
+      "sources_used": 3,
+      "confidence": 0.76,
+      "reasons": [
+        "Based on 3 data sources",
+        "Averaged across multiple vendor projections"
+      ]
+    },
+    {
+      "player_id": "espn:3116593",
+      "name": "Josh Allen",
+      "team": "BUF",
+      "position": "QB",
+      "stat_name": "passing_yards",
+      "projection": 268.2,
+      "method": "avg(vendor_values)",
+      "sources_used": 2,
+      "confidence": 0.70,
+      "reasons": [
+        "Based on 2 data sources",
+        "Averaged across multiple vendor projections"
+      ]
+    },
+    {
+      "player_id": "espn:3116593",
+      "name": "Josh Allen",
+      "team": "BUF",
+      "position": "QB",
+      "stat_name": "rushing_yards",
+      "projection": 38.5,
+      "method": "avg(vendor_values)",
+      "sources_used": 2,
+      "confidence": 0.68,
+      "reasons": [
+        "Based on 2 data sources",
+        "Averaged across multiple vendor projections"
+      ]
+    }
+  ]
+}

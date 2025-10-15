@@ -1,0 +1,59 @@
+{
+  "schema_version": "v1",
+  "last_refresh": "2025-10-15T08:00:00.000Z",
+  "week": "2025-06",
+  "league": "nfl",
+  "source": "espn",
+  "players": [
+    {
+      "player_id": "espn:4685",
+      "name": "Patrick Mahomes",
+      "team": "KC",
+      "position": "QB",
+      "stats": {
+        "passing_yards": 312,
+        "passing_tds": 3,
+        "rushing_yards": 24,
+        "completions": 28,
+        "attempts": 39
+      }
+    },
+    {
+      "player_id": "espn:3116593",
+      "name": "Josh Allen",
+      "team": "BUF",
+      "position": "QB",
+      "stats": {
+        "passing_yards": 289,
+        "passing_tds": 2,
+        "rushing_yards": 42,
+        "completions": 24,
+        "attempts": 35
+      }
+    },
+    {
+      "player_id": "espn:3929630",
+      "name": "Christian McCaffrey",
+      "team": "SF",
+      "position": "RB",
+      "stats": {
+        "rushing_yards": 118,
+        "rushing_tds": 2,
+        "receptions": 6,
+        "receiving_yards": 52
+      }
+    },
+    {
+      "player_id": "espn:3043078",
+      "name": "Tyreek Hill",
+      "team": "MIA",
+      "position": "WR",
+      "stats": {
+        "receptions": 9,
+        "receiving_yards": 142,
+        "receiving_tds": 1,
+        "targets": 12
+      }
+    }
+  ]
+}

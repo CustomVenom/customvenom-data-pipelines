@@ -1,0 +1,57 @@
+{
+  "schema_version": "v1",
+  "last_refresh": "2025-10-15T08:00:00.000Z",
+  "week": "2025-06",
+  "league": "nfl",
+  "source": "weather_api",
+  "games": [
+    {
+      "game_id": "nfl_2025_06_001",
+      "home_team": "KC",
+      "away_team": "LV",
+      "venue": "Arrowhead Stadium",
+      "city": "Kansas City",
+      "state": "MO",
+      "weather": {
+        "temperature_f": 68,
+        "wind_mph": 8,
+        "wind_direction": "SE",
+        "precipitation_pct": 10,
+        "conditions": "Partly Cloudy",
+        "dome": false
+      }
+    },
+    {
+      "game_id": "nfl_2025_06_002",
+      "home_team": "BUF",
+      "away_team": "NYJ",
+      "venue": "Highmark Stadium",
+      "city": "Orchard Park",
+      "state": "NY",
+      "weather": {
+        "temperature_f": 52,
+        "wind_mph": 15,
+        "wind_direction": "W",
+        "precipitation_pct": 30,
+        "conditions": "Overcast",
+        "dome": false
+      }
+    },
+    {
+      "game_id": "nfl_2025_06_003",
+      "home_team": "NO",
+      "away_team": "TB",
+      "venue": "Caesars Superdome",
+      "city": "New Orleans",
+      "state": "LA",
+      "weather": {
+        "temperature_f": 72,
+        "wind_mph": 0,
+        "wind_direction": "N/A",
+        "precipitation_pct": 0,
+        "conditions": "Dome",
+        "dome": true
+      }
+    }
+  ]
+}
