@@ -17,7 +17,7 @@ jobs:
   notion:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       # 1) Presence check (names only, never echo values)
       - name: Verify required secrets (names only)
