@@ -1,0 +1,9 @@
+{
+  "last_refresh": "2025-10-17T15:30:00.000Z",
+  "schema_version": "v1",
+  "window_sec": 600,
+  "hits": 420,
+  "total": 600,
+  "notes": "Rolling 10-minute cache hit summary, updated every minute by scheduled worker"
+}
+

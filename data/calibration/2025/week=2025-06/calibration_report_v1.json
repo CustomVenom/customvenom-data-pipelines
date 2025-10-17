@@ -1,0 +1,21 @@
+{
+  "week": "2025-06",
+  "last_refresh": "2025-10-17T15:30:00.000Z",
+  "schema_version": "v1",
+  "coverage": {
+    "QB": 0.95,
+    "RB": 0.92,
+    "WR": 0.88,
+    "TE": 0.85,
+    "overall": 0.90
+  },
+  "pinball": {
+    "QB": 0.12,
+    "RB": 0.15,
+    "WR": 0.18,
+    "TE": 0.22,
+    "overall": 0.17
+  },
+  "notes": "Calibration metrics for golden week 2025-06"
+}
+
