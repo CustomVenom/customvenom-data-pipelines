@@ -2,18 +2,7 @@ from prophet import Prophet
 import pandas as pd
 
 def demo_forecast():
-    # toy weekly series
-    df = pd.DataFrame({"ds": pd.date_range("2025-01-01", periods=12, freq="W"),
-                       "y": [10,11,9,13,12,14,11,13,12,15,14,16]})
-    m = Prophet(weekly_seasonality=True, yearly_seasonality=False, daily_seasonality=False)
-    m.fit(df)
-    fc = m.predict(m.make_future_dataframe(periods=1, freq="W")).tail(1).iloc[0]
-    return {"mean": float(fc["yhat"]), "low": float(fc["yhat_lower"]), "high": float(fc["yhat_upper"])}
-    
-    from prophet import Prophet
-import pandas as pd
-
-def demo_forecast():
+    """Toy weekly series forecast for demonstration"""
     df = pd.DataFrame({"ds": pd.date_range("2025-01-01", periods=12, freq="W"),
                        "y": [10,11,9,13,12,14,11,13,12,15,14,16]})
     m = Prophet(weekly_seasonality=True, yearly_seasonality=False, daily_seasonality=False)
